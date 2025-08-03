@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Joguinho Nerd - Final Interativo</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #0f172a;
+    color: #f1f5f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+  }
+  .container {
+    background-color: #1e293b;
+    padding: 30px 25px;
+    border-radius: 15px;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    position: relative;
+  }
+  button {
+    margin-top: 20px;
+    background-color: #3b82f6;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+  }
+  button:hover {
+    background-color: #2563eb;
+  }
+  /* Botão fugitivo no final */
+  #btnSair {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+  }
+  #mensagem {
+    transition: opacity 0.3s ease;
+  }
+</style>
+</head>
+<body>
+  <div class="container" id="container">
+    <h2 id="mensagem">Iniciando script de carência nerd...</h2>
+    <button id="btnContinuar">Continuar</button>
+  </div>
+
+<script>
+  const mensagens = [
+    "Erro 404: sua presença não encontrada 😞",
+    "Rodando update do afeto... Falha crítica 💔",
+    "Você desbloqueou +1 linha de saudade",
+    "Carregando emoji carente: 🥺",
+    "Se você clicar mais uma vez, eu fico com vergonha 😳",
+    "Essa interface tá bugada de saudade de você",
+    "Variável 'vontadeDeTeVer' = true;",
+    "Compilando coragem pra te chamar... ainda 2% 😅",
+    "Fica mais um pouco aqui? Esse código sente tua falta",
+    "Você chegou ao fim do script. Mas meu carinho por você ainda tá em loop infinito ♾️"
+  ];
+
+  let index = 0;
+  const mensagemEl = document.getElementById('mensagem');
+  const btnContinuar = document.getElementById('btnContinuar');
+  const container = document.getElementById('container');
+
+  btnContinuar.addEventListener('click', () => {
+    fadeOutIn(() => {
+      if (index < mensagens.length) {
+        mensagemEl.textContent = mensagens[index];
+        index++;
+      } else {
+        // fim das mensagens, troca botão continuar pelo botão sair “fugitivo”
+        btnContinuar.style.display = 'none';
+        criaBotaoSair();
+      }
+    });
+  });
+
+  function fadeOutIn(callback) {
+    mensagemEl.style.opacity = 0;
+    setTimeout(() => {
+      callback();
+      mensagemEl.style.opacity = 1;
+    }, 300);
+  }
+
+  let tentativasSair = 0;
+  function criaBotaoSair() {
+    const btnSair = document.createElement('button');
+    btnSair.id = 'btnSair';
+    btnSair.textContent = 'Sair';
+    container.appendChild(btnSair);
+
+    posicionaBotaoSair(btnSair);
+
+    btnSair.addEventListener('click', () => {
+      tentativasSair++;
+      if (tentativasSair === 1) {
+        moveBotaoFugitivo(btnSair);
+      } else if (tentativasSair === 2) {
+        fadeOutIn(() => {
+          mensagemEl.textContent = "Poxa, já tá querendo me esquecer, pia? Mesmo, ok! FIM DO SCRIPT.";
+          btnSair.disabled = true;
+          btnSair.style.cursor = 'default';
+          btnSair.style.backgroundColor = '#555';
+          btnSair.style.position = 'relative';
+          btnSair.style.top = 'auto';
+          btnSair.style.left = 'auto';
+          btnSair.style.transform = 'none';
+        });
+      }
+    });
+  }
+
+  function posicionaBotaoSair(btn) {
+    btn.style.top = '50%';
+    btn.style.left = '50%';
+    btn.style.transform = 'translate(-50%, -50%)';
+    btn.style.position = 'absolute';
+  }
+
+  function moveBotaoFugitivo(btn) {
+    const maxLeft = container.clientWidth - btn.offsetWidth - 10;
+    const maxTop = container.clientHeight - btn.offsetHeight - 10;
+
+    const left = Math.floor(Math.random() * maxLeft);
+    const top = Math.floor(Math.random() * maxTop);
+
+    btn.style.left = left + 'px';
+    btn.style.top = top + 'px';
+    btn.style.transform = 'none';
+  }
+</script>
+</body>
+</html>
